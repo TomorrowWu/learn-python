@@ -48,3 +48,36 @@ print(X.sum())
 
 #  norm函数: L2 范数结果 asscalar函数将结果变换为Python中的标量
 print(X.norm().asscalar())
+
+# 截取了矩阵X中行索引为1和2的两行
+print(X[1:3])
+
+# 访问的单个元素的位置，如矩阵中行和列的索引
+X[1, 2] = 9
+
+print(X)
+
+# 截取一部分元素，并为它们重新赋值
+X[1:2, :] = 12
+print(X)
+
+# 如果两个实例的ID一致，那么它们所对应的内存地址相同；反之则不同
+before = id(Y)
+Y = Y + X
+print(id(Y) == before)
+
+# 指定结果到特定内存，我们可以使用前面介绍的索引来进行替换操作
+# 为X + Y开了临时内存来存储计算结果，再复制到Z对应的内存
+Z = Y.zeros_like()
+before = id(Z)
+Z[:] = X + Y
+print(id(Z) == before)
+
+# 避免这个临时内存开销，我们可以使用运算符全名函数中的out参数
+nd.elemwise_add(X, Y, out=Z)
+print(id(Z) == before)
+
+# 如果X的值在之后的程序中不会复用,减少运算的内存开销
+before = id(X)
+X += Y
+print(id(X) == before)
